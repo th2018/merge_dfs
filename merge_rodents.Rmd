@@ -1,0 +1,42 @@
+---
+title: "merge_rodent"
+author: "Tao Huang"
+date: "October 2, 2019"
+output: html_document
+---
+
+#merge to get the mammal-disease-transmission mode
+```{r}
+setwd("C:/Users/huangt/Downloads/")
+a<-read.csv("allmammGID-clean20190812.csv")
+ar<-a[a$Order=="Rodentia",]
+h<-read.csv("host - rodent-disease transmission modes_20190413 (1).csv")
+ah<-merge(x=ar,y=h,by.x= "Zoonoses",by.y= "Zoonoses.with.rodent.reservoirs",all=T)
+dim(ar)
+dim(h)
+dim(ah)
+
+dim(ar[ar$Zoonoses=="",] )
+#2033
+dim(ar[ar$Zoonoses%in%h$Zoonoses.with.rodent.reservoirs,] )
+#585
+dim(ar[(ar$Zoonoses=="") | ar$Zoonoses%in%h$Zoonoses.with.rodent.reservoirs,])
+#2618
+
+#Balantidiasis
+```
+
+#load and merge the climate data
+```{r}
+cli<-load("C:/Users/huangt/Downloads/climate_envelope.Rdata")
+head(cli)
+
+xclim$binomial<-gsub(" ","_",xclim$binomial)
+
+ah_cli<-merge(ah,xclim,by.x=  "Spp" , by.y= "binomial",all=T )
+
+head(ah_cli)
+
+```
+
+
